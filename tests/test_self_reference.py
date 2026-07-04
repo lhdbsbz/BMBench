@@ -1,5 +1,5 @@
 # tests/test_self_reference.py
-from generator.schemas import Fact, FactGraph
+from generator.schemas import Fact, FactGraph, ROLE_SELF, ROLE_SELF_OTHER
 from generator.render import fact_to_event
 from bmb.contract import Capabilities, CapabilityFlag
 from lenses.self_reference import SelfReferenceLens
@@ -14,8 +14,10 @@ class _AllRecallAdapter:
 
 def _graph():
     return FactGraph(user_id="u1", facts=[
-        Fact(fact_id="s", ts=1.0, text="我的周会", key_tokens=["我的", "周会"], self_relevance=0.8),
-        Fact(fact_id="o", ts=2.0, text="同事午餐", key_tokens=["同事", "午餐"]),
+        Fact(fact_id="s", ts=1.0, text="我的周会", key_tokens=["我的", "周会"],
+             self_relevance=0.8, role=ROLE_SELF),
+        Fact(fact_id="o", ts=2.0, text="同事午餐", key_tokens=["同事", "午餐"],
+             role=ROLE_SELF_OTHER),
     ])
 
 

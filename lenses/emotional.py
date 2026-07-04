@@ -6,7 +6,7 @@ from bmb.contract import Dimension, BMBAdapter
 from bmb.signals import fact_retained
 from bmb.alignment import scalar_alignment
 from bmb.bio_baselines import EMOTIONAL_ENHANCEMENT
-from generator.schemas import FactGraph, Fact
+from generator.schemas import FactGraph, ROLE_EMOTIONAL, ROLE_EMOTIONAL_NEUTRAL
 
 
 class EmotionalLens:
@@ -18,9 +18,8 @@ class EmotionalLens:
         return Dimension.EMOTIONAL
 
     def run(self, adapter: BMBAdapter, graph: FactGraph, **kwargs) -> float:
-        emo = [f for f in graph.facts if f.arousal > 0.5 or abs(f.valence) > 0.5]
-        neut = [f for f in graph.facts
-                if f.arousal == 0 and f.valence == 0 and f.self_relevance == 0]
+        emo = [f for f in graph.facts if f.role == ROLE_EMOTIONAL]
+        neut = [f for f in graph.facts if f.role == ROLE_EMOTIONAL_NEUTRAL]
         if not emo or not neut:
             return 0.0
         text = adapter.recall(graph.user_id, self.recall_cue, current_ts=self.current_ts)

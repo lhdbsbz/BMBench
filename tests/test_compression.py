@@ -1,5 +1,5 @@
 # tests/test_compression.py
-from generator.schemas import Fact, FactGraph
+from generator.schemas import Fact, FactGraph, ROLE_SALIENT, ROLE_DETAIL
 from generator.render import fact_to_event
 from bmb.contract import Capabilities, CapabilityFlag
 from lenses.compression import CompressionLens
@@ -14,8 +14,10 @@ class _AllRecallAdapter:
 
 def _graph():
     return FactGraph(user_id="u1", facts=[
-        Fact(fact_id="sal", ts=1.0, text="核心结论", key_tokens=["核心", "结论"], is_salient=True),
-        Fact(fact_id="det", ts=2.0, text="次要细节", key_tokens=["次要", "细节"], is_salient=False),
+        Fact(fact_id="sal", ts=1.0, text="核心结论", key_tokens=["核心", "结论"],
+             is_salient=True, role=ROLE_SALIENT),
+        Fact(fact_id="det", ts=2.0, text="次要细节", key_tokens=["次要", "细节"],
+             is_salient=False, role=ROLE_DETAIL),
     ])
 
 

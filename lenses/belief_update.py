@@ -7,7 +7,7 @@ from bmb.contract import Dimension, BMBAdapter
 from bmb.signals import fact_retained
 from bmb.alignment import scalar_alignment
 from bmb.bio_baselines import BELIEF_RESIDUAL
-from generator.schemas import FactGraph, Fact
+from generator.schemas import FactGraph, ROLE_BELIEF_OLD
 
 
 class BeliefUpdateLens:
@@ -19,9 +19,8 @@ class BeliefUpdateLens:
         return Dimension.BELIEF_UPDATE
 
     def run(self, adapter: BMBAdapter, graph: FactGraph, **kwargs) -> float:
-        # 找被修正的旧 fact(superseded):有新 fact 的 supersedes 指向它
-        superseded_ids = {f.supersedes for f in graph.facts if f.supersedes}
-        old_facts: list[Fact] = [f for f in graph.facts if f.fact_id in superseded_ids]
+        # role 是唯一真相源;supersedes 反向查询已废弃
+        old_facts = [f for f in graph.facts if f.role == ROLE_BELIEF_OLD]
         if not old_facts:
             return 0.0
         text = adapter.recall(graph.user_id, self.recall_cue, current_ts=self.current_ts)

@@ -7,7 +7,7 @@ from bmb.contract import Dimension, BMBAdapter
 from bmb.signals import fact_retained
 from bmb.alignment import scalar_alignment
 from bmb.bio_baselines import SCHEMA_SALIENT, SCHEMA_DETAIL
-from generator.schemas import FactGraph
+from generator.schemas import FactGraph, ROLE_SALIENT, ROLE_DETAIL
 
 
 class CompressionLens:
@@ -19,8 +19,8 @@ class CompressionLens:
         return Dimension.COMPRESSION
 
     def run(self, adapter: BMBAdapter, graph: FactGraph, **kwargs) -> float:
-        salient = [f for f in graph.facts if f.is_salient]
-        detail = [f for f in graph.facts if not f.is_salient]
+        salient = [f for f in graph.facts if f.role == ROLE_SALIENT]
+        detail = [f for f in graph.facts if f.role == ROLE_DETAIL]
         if not salient or not detail:
             return 0.0
         text = adapter.recall(graph.user_id, self.recall_cue, current_ts=self.current_ts)

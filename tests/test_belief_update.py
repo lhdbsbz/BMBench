@@ -1,5 +1,5 @@
 # tests/test_belief_update.py
-from generator.schemas import Fact, FactGraph
+from generator.schemas import Fact, FactGraph, ROLE_BELIEF_OLD, ROLE_BELIEF_NEW
 from generator.render import fact_to_event
 from bmb.contract import Capabilities, CapabilityFlag
 from lenses.belief_update import BeliefUpdateLens
@@ -13,9 +13,11 @@ class _AllRecallAdapter:
 
 
 def _graph():
-    # old 先, new 后(new.supersedes=old)
-    old = Fact(fact_id="old", ts=1.0, text="会议周三", key_tokens=["会议", "周三"])
-    new = Fact(fact_id="new", ts=2.0, text="会议周四", key_tokens=["会议", "周四"], supersedes="old")
+    # old 先, new 后; role 是唯一真相源,new 不再需要 supersedes 指针
+    old = Fact(fact_id="old", ts=1.0, text="会议周三", key_tokens=["会议", "周三"],
+               role=ROLE_BELIEF_OLD)
+    new = Fact(fact_id="new", ts=2.0, text="会议周四", key_tokens=["会议", "周四"],
+               role=ROLE_BELIEF_NEW)
     return FactGraph(user_id="u1", facts=[old, new])
 
 

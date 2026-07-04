@@ -6,7 +6,7 @@ from bmb.contract import Dimension, BMBAdapter
 from bmb.signals import fact_retained
 from bmb.alignment import scalar_alignment
 from bmb.bio_baselines import SELF_REFERENCE_EFFECT
-from generator.schemas import FactGraph
+from generator.schemas import FactGraph, ROLE_SELF, ROLE_SELF_OTHER
 
 
 class SelfReferenceLens:
@@ -18,9 +18,8 @@ class SelfReferenceLens:
         return Dimension.SELF_REFERENCE
 
     def run(self, adapter: BMBAdapter, graph: FactGraph, **kwargs) -> float:
-        self_f = [f for f in graph.facts if f.self_relevance > 0.5]
-        other = [f for f in graph.facts
-                 if f.self_relevance == 0 and f.arousal == 0 and f.valence == 0]
+        self_f = [f for f in graph.facts if f.role == ROLE_SELF]
+        other = [f for f in graph.facts if f.role == ROLE_SELF_OTHER]
         if not self_f or not other:
             return 0.0
         text = adapter.recall(graph.user_id, self.recall_cue, current_ts=self.current_ts)
