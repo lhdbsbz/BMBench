@@ -1,0 +1,4 @@
+# 真实运行:换成你自托管/远程的 OpenAI 兼容开源模型端点。锁版本 + seed 由调用方保证。
+base_url: "http://localhost:8000/v1"
+api_key: "dummy"
+model: "qwen2.5-14b-instruct"   # 示例,部署时换实际 pinned 模型
