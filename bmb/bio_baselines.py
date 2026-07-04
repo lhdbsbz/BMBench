@@ -28,3 +28,9 @@ BELIEF_RESIDUAL = 0.30
 # 图式:要义保留率 vs 表面细节保留率(要义 > 细节)
 SCHEMA_SALIENT = 0.80
 SCHEMA_DETAIL = 0.30
+# 再构漂移:健康成人多次回忆同一事件时,细节 token 的合理漂移率
+# (Bartlett 1932 重构记忆 / Loftus 误导信息范式类量级;待校准,见 spec §10.1)
+RECONSTRUCTION_DRIFT = 0.30
+# 再巩固效应:召回动作本身诱发的额外漂移量(相较不召回)
+# (Nader 2000 / Hupbach 2007 再巩固类量级;待校准)
+RECONSOLIDATION_EFFECT = 0.20

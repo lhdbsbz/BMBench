@@ -42,3 +42,15 @@ def test_constants_in_unit_interval():
 
 def test_schema_salient_above_detail():
     assert SCHEMA_SALIENT > SCHEMA_DETAIL  # 要义保留 > 细节保留
+
+
+def test_reconstruction_baselines_in_unit_interval():
+    from bmb.bio_baselines import RECONSTRUCTION_DRIFT, RECONSOLIDATION_EFFECT
+    assert 0.0 <= RECONSTRUCTION_DRIFT <= 1.0
+    assert 0.0 <= RECONSOLIDATION_EFFECT <= 1.0
+
+
+def test_reconstruction_drift_is_moderate():
+    from bmb.bio_baselines import RECONSTRUCTION_DRIFT
+    # 健康漂移是中度:既非 0(冷库)也非 1(幻觉)
+    assert 0.1 < RECONSTRUCTION_DRIFT < 0.6
