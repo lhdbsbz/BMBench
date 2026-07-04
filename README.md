@@ -15,6 +15,7 @@ python -m pytest -q         # 跑全部测试
 python run_benchmark.py --seed 3 --adapter cold          # 冷库(地板)
 python run_benchmark.py --seed 3 --adapter bio_faithful  # 天花板
 ```
+> Windows 若 `python`/`pip` 不可用(Windows Store 占位符),改用 `py` 与 `py -m pip`。
 
 ## 核心概念
 - **评测目标**:系统行为对齐健康成人记忆的实证分布(钟形评分,过度和不足都扣分)。

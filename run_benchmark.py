@@ -21,7 +21,7 @@ def build_adapter(name: str, structured: bool):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--seed", type=int, default=42)
+    ap.add_argument("--seed", type=int, default=3)
     ap.add_argument("--adapter", default="cold", choices=["cold", "bio_faithful"])
     ap.add_argument("--plain-text", action="store_true", help="纯文本模式(不传结构化标注)")
     args = ap.parse_args()
