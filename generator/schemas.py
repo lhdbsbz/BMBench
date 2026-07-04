@@ -11,6 +11,7 @@ ROLE_BELIEF_OLD       = "beliefOld"
 ROLE_BELIEF_NEW       = "beliefNew"
 ROLE_SALIENT          = "salient"
 ROLE_DETAIL           = "detail"
+ROLE_RECONSTRUCTION   = "reconstruction"
 
 
 @dataclass
@@ -22,6 +23,8 @@ class Fact:
     ts: float
     text: str
     key_tokens: list[str] = field(default_factory=list)  # 确定性探针锚点
+    core_tokens: list[str] = field(default_factory=list)    # 要义:健康再构须保住
+    detail_tokens: list[str] = field(default_factory=list)  # 细节:可合理漂移
     valence: float = 0.0
     arousal: float = 0.0
     self_relevance: float = 0.0

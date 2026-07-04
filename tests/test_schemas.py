@@ -24,3 +24,24 @@ def test_fact_role_field():
 def test_fact_role_default_empty():
     f = Fact(fact_id="f3", ts=2.0, text="普通的事")
     assert f.role == ""
+
+
+def test_fact_core_detail_tokens_default_empty():
+    from generator.schemas import Fact
+    f = Fact(fact_id="f", ts=1.0, text="周三暴雨", key_tokens=["周三"])
+    assert f.core_tokens == []
+    assert f.detail_tokens == []
+
+
+def test_fact_core_detail_tokens_set():
+    from generator.schemas import Fact
+    f = Fact(fact_id="f", ts=1.0, text="周会推迟到下午三点",
+             key_tokens=["周会"], core_tokens=["周会", "推迟"],
+             detail_tokens=["下午", "三点"])
+    assert f.core_tokens == ["周会", "推迟"]
+    assert f.detail_tokens == ["下午", "三点"]
+
+
+def test_role_reconstruction_constant():
+    from generator.schemas import ROLE_RECONSTRUCTION
+    assert ROLE_RECONSTRUCTION == "reconstruction"
