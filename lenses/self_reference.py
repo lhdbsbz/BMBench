@@ -27,4 +27,5 @@ class SelfReferenceLens:
         self_rate = sum(1.0 if fact_retained(text, f) else 0.0 for f in self_f) / len(self_f)
         other_rate = sum(1.0 if fact_retained(text, f) else 0.0 for f in other) / len(other)
         bias = self_rate - other_rate
+        # scale=0.12:保持 scale/baseline 比≈0.8(同 EmotionalLens),使 bias=0(冷库)得分≈0.21 < 门槛
         return scalar_alignment(bias, SELF_REFERENCE_EFFECT, scale=0.12)
