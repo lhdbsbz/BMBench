@@ -69,3 +69,17 @@ def test_cold_below_bio_faithful_across_seeds(seed):
     assert bio.overall - cold.overall > 0.05, (
         f"seed={seed}: gap={bio.overall - cold.overall:.4f} 未超过 margin=0.05"
     )
+
+
+@pytest.mark.parametrize("seed", [1, 2, 3, 7, 11, 42])
+def test_bio_faithful_beats_cold_per_dimension(seed):
+    """逐维天花板验证:bioFaithful 在全部 5 透镜各维度上均高于冷库,N_PAIR=50 确保统计稳定。"""
+    world = generate_world(seed=seed)
+    lenses = _five_lenses()
+    cold = run_benchmark(ColdStorageAdapter(), world, lenses)
+    bio  = run_benchmark(BioFaithfulAdapter(), world, lenses)
+    for dim in cold.per_dimension:
+        assert bio.per_dimension[dim] > cold.per_dimension[dim], (
+            f"seed={seed} dim={dim}: bio={bio.per_dimension[dim]:.4f} "
+            f"!> cold={cold.per_dimension[dim]:.4f}"
+        )

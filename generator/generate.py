@@ -14,8 +14,9 @@ from generator.schemas import (Fact, FactGraph,
 _SUBJECTS = ["项目周会", "客户来电", "快递送达", "系统告警", "午餐", "晨跑"]
 _PREDICATES = ["推迟到下午", "确认了需求", "放在前台", "已自动恢复", "吃的拉面", "绕了公园"]
 
-# 每个角色的事实数:≥5 使保留率均值在 2σ 内收敛到目标概率
-N_PAIR = 5
+# 每个角色的事实数:≥50 使保留率均值在 2σ 内收敛到目标概率,并确保偏置维度(情绪/自我/压缩)
+# 在所有 seed 上均成为 bioFaithful 相对冷库的逐维天花板(N=5 方差过大、低至 0.0002 失效)
+N_PAIR = 50
 
 
 def _fact(uid: str, idx: int, ts: float, subj: str, pred: str, **kw) -> Fact:
