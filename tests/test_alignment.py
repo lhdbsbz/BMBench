@@ -24,3 +24,19 @@ def test_total_loss_flat_zero_is_low():
 def test_in_unit_interval():
     cold = [(t, 1.0) for t, _ in BASELINE]
     assert 0.0 <= curve_alignment(cold, BASELINE) <= 1.0
+
+
+from bmb.alignment import scalar_alignment
+
+
+def test_scalar_perfect_match():
+    assert scalar_alignment(0.25, 0.25) == 1.0
+
+
+def test_scalar_off_baseline_is_low():
+    assert scalar_alignment(0.0, 0.25) < 0.25   # 无偏置 vs 基准 0.25; exp(-1.5625)≈0.2096
+    assert scalar_alignment(1.0, 0.25) < 0.25   # 过度偏置
+
+
+def test_scalar_in_unit_interval():
+    assert 0.0 <= scalar_alignment(0.5, 0.25) <= 1.0

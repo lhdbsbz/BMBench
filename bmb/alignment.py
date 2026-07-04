@@ -16,3 +16,8 @@ def curve_alignment(adapter_curve: list[tuple[float, float]],
         return 0.0
     mad = sum(diffs) / len(diffs)
     return max(0.0, min(1.0, math.exp(-(mad / scale) ** 2)))
+
+
+def scalar_alignment(value: float, baseline: float, scale: float = 0.2) -> float:
+    """标量钟形:exp(-((value-baseline)/scale)²)。value=baseline→1;偏离→趋 0。"""
+    return max(0.0, min(1.0, math.exp(-((value - baseline) / scale) ** 2)))
