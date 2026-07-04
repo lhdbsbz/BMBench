@@ -1,5 +1,5 @@
 # lenses/compression.py
-"""压缩/图式透镜:测要义保留率 + 细节丢弃率,复合对齐 SCHEMA_SALIENT / SCHEMA_DETAIL。
+"""压缩/图式透镜:测要义保留率 + 细节保留率,复合对齐 SCHEMA_SALIENT / SCHEMA_DETAIL。
 冷库全保留(要义≈1、细节≈1)→ 细节端偏离基准(0.30)→ 低分;健康系统保要义丢细节。"""
 from __future__ import annotations
 
