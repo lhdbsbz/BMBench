@@ -9,6 +9,10 @@ from bmb.harness import run_benchmark
 from bmb.adapters.cold_storage import ColdStorageAdapter
 from bmb.adapters.bio_faithful import BioFaithfulAdapter
 from lenses.forgetting import ForgettingLens
+from lenses.emotional import EmotionalLens
+from lenses.self_reference import SelfReferenceLens
+from lenses.compression import CompressionLens
+from lenses.belief_update import BeliefUpdateLens
 
 
 def build_adapter(name: str, structured: bool):
@@ -21,13 +25,19 @@ def build_adapter(name: str, structured: bool):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--seed", type=int, default=3)
+    ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--adapter", default="cold", choices=["cold", "bio_faithful"])
     ap.add_argument("--plain-text", action="store_true", help="纯文本模式(不传结构化标注)")
     args = ap.parse_args()
 
     world = generate_world(seed=args.seed)
-    lenses = [ForgettingLens(sample_ts=[0.0, 1.0, 2.0, 5.0])]
+    lenses = [
+        ForgettingLens(sample_ts=[0.0, 1.0, 2.0, 5.0]),
+        EmotionalLens(current_ts=3.0),
+        SelfReferenceLens(current_ts=3.0),
+        CompressionLens(current_ts=3.0),
+        BeliefUpdateLens(current_ts=3.0),
+    ]
     adapter = build_adapter(args.adapter, structured=not args.plain_text)
 
     report = run_benchmark(adapter, world, lenses, structured=not args.plain_text)
