@@ -1,6 +1,0 @@
-{
-  "version": "smoke",
-  "seed": 42,
-  "n_users": 3,
-  "span_days": 30
-}
