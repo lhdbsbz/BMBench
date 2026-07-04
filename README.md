@@ -1,22 +1,27 @@
-# 仿生记忆评测框架 BMB
+# 仿生记忆评测框架 BMB v2
 
-> 测的不是"答案准不准",而是**记忆架构在固定模型 + 预算下,用多小的载荷恢复多少决策相关信息**——逼近"最小充分统计量"的程度。详见 [设计文档](docs/design/bmb-v1-design.md)。
+> 测的不是「信息恢复多少」,而是**一个记忆系统的外部行为有多接近健康成人记忆的实证分布**。
+> 详见 [设计文档](docs/design/bmb-v2-design.md)。
+
+## 当前状态(Plan 1:核心引擎 + 遗忘曲线透镜)
+
+可评测「遗忘曲线」一个维度,跑通自检硬门(冷库地板 < bio-faithful 天花板)。
+其余五个透镜(情绪增强 / 再构·再巩固 / 压缩·图式 / 信念更新 / 自我关联)在后续 plan 扩展。
 
 ## 快速开始
 ```bash
-pip install -r requirements.txt
-python scripts/make_smoke.py                       # 生成迷你数据集(FakeModel,无需 LLM)
-python run_benchmark.py --dataset datasets/smoke --adapter naive_dump --model fake
-python run_benchmark.py --dataset datasets/smoke --adapter oracle   --model fake
+pip install pytest          # 唯一依赖
+python -m pytest -q         # 跑全部测试
+python run_benchmark.py --seed 3 --adapter cold          # 冷库(地板)
+python run_benchmark.py --seed 3 --adapter bio_faithful  # 天花板
 ```
-> Windows 若 `python`/`pip` 不可用(Windows Store 占位符),改用 `py` 与 `py -m pip`。
 
-oracle 应明显高于 naive(自检电路)。真实评测:配 `configs/judge.yaml` 接开源模型,生成 `datasets/v1`(见下)。
-
-## 三件事
-- **核心指标**:信息恢复率 ∈[0,1],沿预算画「保真–预算前沿」,标量=前沿下面积 AUF。
-- **三个压缩难题**:A 噪音→显著性、C 历史→当前态、B 流水账→隐结构。
-- **自检电路**:每次出分先跑 naive(地板)+ oracle(天花板),两端不正常则结果作废。
+## 核心概念
+- **评测目标**:系统行为对齐健康成人记忆的实证分布(钟形评分,过度和不足都扣分)。
+- **六个维度**:遗忘曲线、情绪增强、再构/再巩固、压缩/图式、信念更新、自我关联。
+- **确定性优先**:信号提取用确定性事实探针,不依赖 LLM judge(可复现)。
+- **自检电路**:每次出分先跑冷库(地板)+ bio-faithful(天花板),两端不正常则结果作废。
 
 ## 接入你的记忆系统
-见 [adapter 作者指南](docs/authoring/adapter_authoring.md)。
+实现 `ingest(ts, event)` + `recall(cue, current_ts, session_id)` 两个方法。详见
+[设计文档 §8](docs/design/bmb-v2-design.md#8-adapter-接入onboarding)。
