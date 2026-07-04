@@ -5,7 +5,7 @@ from bmb.contract import Dimension, StructuredEvent, CapabilityFlag, Capabilitie
 def test_dimension_six_members():
     assert {d.value for d in Dimension} == {
         "forgetting", "emotional", "reconstruction",
-        "compression", "belief_update", "self_reference",
+        "compression", "beliefUpdate", "selfReference",
     }
 
 

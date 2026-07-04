@@ -12,15 +12,15 @@ class Dimension(str, Enum):
     EMOTIONAL = "emotional"              # 情绪增强
     RECONSTRUCTION = "reconstruction"    # 再构 / 再巩固
     COMPRESSION = "compression"          # 压缩 / 图式
-    BELIEF_UPDATE = "belief_update"      # 信念更新
-    SELF_REFERENCE = "self_reference"    # 自我关联
+    BELIEF_UPDATE = "beliefUpdate"      # 信念更新
+    SELF_REFERENCE = "selfReference"    # 自我关联
 
 
 class CapabilityFlag(str, Enum):
     """adapter 能力声明。框架据此标注每个维度是「真测」还是「因不支持而冷库化」。"""
-    STRUCTURED_EVENT = "structured_event"  # 吃结构化 event(否则只收纯文本)
-    TIME_AWARE = "time_aware"              # 用 current_ts 做衰减(否则永不衰减=冷库)
-    STATEFUL_RECALL = "stateful_recall"    # recall 有副作用(再巩固);否则无状态
+    STRUCTURED_EVENT = "structuredEvent"  # 吃结构化 event(否则只收纯文本)
+    TIME_AWARE = "timeAware"              # 用 current_ts 做衰减(否则永不衰减=冷库)
+    STATEFUL_RECALL = "statefulRecall"    # recall 有副作用(再巩固);否则无状态
 
 
 @dataclass
