@@ -5,7 +5,9 @@ from dataclasses import dataclass, field
 
 @dataclass
 class Fact:
-    """一条结构化事实。key_tokens 用于确定性信号提取(子串匹配判断是否保留)。"""
+    """一条结构化事实。key_tokens 用于确定性信号提取(子串匹配判断是否保留)。
+    role: 该 fact 在配对中的角色(如 emotional/emotionalNeutral),用于透镜精确筛选。
+    """
     fact_id: str
     ts: float
     text: str
@@ -15,6 +17,7 @@ class Fact:
     self_relevance: float = 0.0
     supersedes: str | None = None     # 该事实修正了哪条旧事实
     is_salient: bool = False
+    role: str = ""                    # 配对角色标签(lowerCamelCase);空=未指定
 
 
 @dataclass

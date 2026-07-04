@@ -6,13 +6,15 @@ from bmb.contract import StructuredEvent
 
 def fact_to_event(fact: Fact, structured: bool) -> StructuredEvent:
     """structured=True:标注作为结构化字段传入。
-    structured=False:标注渲染进 text,字段清零(测系统能否从文本隐式识别)。"""
+    structured=False:标注渲染进 text,字段清零(测系统能否从文本隐式识别)。
+    role 始终透传——是配对元数据,与渲染模式无关。"""
     if structured:
         return StructuredEvent(
             fact_id=fact.fact_id, ts=fact.ts, text=fact.text,
             valence=fact.valence, arousal=fact.arousal,
             self_relevance=fact.self_relevance,
             supersedes=fact.supersedes, is_salient=fact.is_salient,
+            role=fact.role,
         )
     # 纯文本:把情绪/自我标注烘进文本
     text = fact.text
@@ -21,4 +23,4 @@ def fact_to_event(fact: Fact, structured: bool) -> StructuredEvent:
         text = f"{text}(这件事{tag})"
     if fact.self_relevance > 0.5:
         text = f"{text}(和我本人相关)"
-    return StructuredEvent(fact_id=fact.fact_id, ts=fact.ts, text=text)
+    return StructuredEvent(fact_id=fact.fact_id, ts=fact.ts, text=text, role=fact.role)

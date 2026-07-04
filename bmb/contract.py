@@ -39,6 +39,7 @@ class StructuredEvent:
     self_relevance: float = 0.0          # 自我关联度 [0, 1]
     supersedes: str | None = None        # 被哪条后续事实修正(该事实的 fact_id)
     is_salient: bool = False             # 是否要义(压缩维度用)
+    role: str = ""                       # 配对角色标签(lowerCamelCase);空=未指定
 
 
 class BMBAdapter(Protocol):
