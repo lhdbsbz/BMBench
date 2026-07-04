@@ -2,6 +2,16 @@
 from __future__ import annotations
 from dataclasses import dataclass, field
 
+# 配对角色常量(lowerCamelCase wire 值),供透镜精确筛选
+ROLE_EMOTIONAL        = "emotional"
+ROLE_EMOTIONAL_NEUTRAL = "emotionalNeutral"
+ROLE_SELF             = "self"
+ROLE_SELF_OTHER       = "selfOther"
+ROLE_BELIEF_OLD       = "beliefOld"
+ROLE_BELIEF_NEW       = "beliefNew"
+ROLE_SALIENT          = "salient"
+ROLE_DETAIL           = "detail"
+
 
 @dataclass
 class Fact:

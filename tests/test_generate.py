@@ -48,3 +48,13 @@ def test_world_has_salient_and_detail_facts():
     salient = [f for f in g.facts if f.is_salient]
     detail = [f for f in g.facts if not f.is_salient]
     assert salient and detail
+
+
+def test_world_facts_have_distinct_roles():
+    from generator.schemas import (ROLE_EMOTIONAL, ROLE_EMOTIONAL_NEUTRAL, ROLE_SELF,
+        ROLE_SELF_OTHER, ROLE_BELIEF_OLD, ROLE_BELIEF_NEW, ROLE_SALIENT, ROLE_DETAIL)
+    g = generate_world(seed=1)["u1"]
+    roles = [f.role for f in g.facts]
+    for r in (ROLE_EMOTIONAL, ROLE_EMOTIONAL_NEUTRAL, ROLE_SELF, ROLE_SELF_OTHER,
+              ROLE_BELIEF_OLD, ROLE_BELIEF_NEW, ROLE_SALIENT, ROLE_DETAIL):
+        assert roles.count(r) == 1

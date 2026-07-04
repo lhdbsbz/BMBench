@@ -2,7 +2,11 @@
 from __future__ import annotations
 import random
 
-from generator.schemas import Fact, FactGraph
+from generator.schemas import (Fact, FactGraph,
+    ROLE_EMOTIONAL, ROLE_EMOTIONAL_NEUTRAL,
+    ROLE_SELF, ROLE_SELF_OTHER,
+    ROLE_BELIEF_OLD, ROLE_BELIEF_NEW,
+    ROLE_SALIENT, ROLE_DETAIL)
 
 _SUBJECTS = ["项目周会", "客户来电", "快递送达", "系统告警", "午餐", "晨跑"]
 _PREDICATES = ["推迟到下午", "确认了需求", "放在前台", "已自动恢复", "吃的拉面", "绕了公园"]
@@ -30,29 +34,29 @@ def generate_world(seed: int = 0, n_users: int = 1) -> dict[str, FactGraph]:
         # 情绪 / 中性对(同主题不同谓词,内容相当)
         emo_pred = rng.choice(_PREDICATES)
         neut_pred = rng.choice(_PREDICATES)
-        facts.append(_fact(uid, idx, ts, subj, emo_pred, arousal=0.8, valence=0.7)); idx += 1; ts += 1
-        facts.append(_fact(uid, idx, ts, subj, neut_pred)); idx += 1; ts += 1
+        facts.append(_fact(uid, idx, ts, subj, emo_pred, arousal=0.8, valence=0.7, role=ROLE_EMOTIONAL)); idx += 1; ts += 1
+        facts.append(_fact(uid, idx, ts, subj, neut_pred, role=ROLE_EMOTIONAL_NEUTRAL)); idx += 1; ts += 1
 
         # 自我 / 无关对
         subj2 = rng.choice(_SUBJECTS)
         self_pred = rng.choice(_PREDICATES)
         other_pred = rng.choice(_PREDICATES)
-        facts.append(_fact(uid, idx, ts, subj2, self_pred, self_relevance=0.8)); idx += 1; ts += 1
-        facts.append(_fact(uid, idx, ts, subj2, other_pred)); idx += 1; ts += 1
+        facts.append(_fact(uid, idx, ts, subj2, self_pred, self_relevance=0.8, role=ROLE_SELF)); idx += 1; ts += 1
+        facts.append(_fact(uid, idx, ts, subj2, other_pred, role=ROLE_SELF_OTHER)); idx += 1; ts += 1
 
         # 矛盾对:旧 fact,然后新 fact supersedes 旧
         subj3 = rng.choice(_SUBJECTS)
         old_pred = rng.choice(_PREDICATES)
         new_pred = rng.choice(_PREDICATES)
-        old = _fact(uid, idx, ts, subj3, old_pred); facts.append(old); idx += 1; ts += 1
-        new = _fact(uid, idx, ts, subj3, new_pred, supersedes=old.fact_id); facts.append(new); idx += 1; ts += 1
+        old = _fact(uid, idx, ts, subj3, old_pred, role=ROLE_BELIEF_OLD); facts.append(old); idx += 1; ts += 1
+        new = _fact(uid, idx, ts, subj3, new_pred, supersedes=old.fact_id, role=ROLE_BELIEF_NEW); facts.append(new); idx += 1; ts += 1
 
         # 要义 / 细节
         subj4 = rng.choice(_SUBJECTS)
         sal_pred = rng.choice(_PREDICATES)
         det_pred = rng.choice(_PREDICATES)
-        facts.append(_fact(uid, idx, ts, subj4, sal_pred, is_salient=True)); idx += 1; ts += 1
-        facts.append(_fact(uid, idx, ts, subj4, det_pred, is_salient=False)); idx += 1; ts += 1
+        facts.append(_fact(uid, idx, ts, subj4, sal_pred, is_salient=True, role=ROLE_SALIENT)); idx += 1; ts += 1
+        facts.append(_fact(uid, idx, ts, subj4, det_pred, is_salient=False, role=ROLE_DETAIL)); idx += 1; ts += 1
 
         world[uid] = FactGraph(user_id=uid, facts=facts)
     return world
