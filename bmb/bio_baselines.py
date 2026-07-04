@@ -8,6 +8,8 @@ import math
 
 def ebbinghaus_retention(t: float, S: float = 1.0, c: float = 0.2) -> float:
     """t=逻辑时间单位,S=相对记忆强度,c=渐近保留率(长期记忆残余)。"""
+    if S <= 0:
+        raise ValueError(f"S 必须为正,收到 {S}")
     return (1.0 - c) * math.exp(-t / S) + c
 
 

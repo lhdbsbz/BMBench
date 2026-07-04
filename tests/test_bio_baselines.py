@@ -1,5 +1,6 @@
 # tests/test_bio_baselines.py
 import math
+import pytest
 from bmb.bio_baselines import ebbinghaus_retention, forgetting_baseline_curve
 
 
@@ -20,3 +21,10 @@ def test_baseline_curve_monotone_decreasing_sampled():
     pts = forgetting_baseline_curve([0.0, 1.0, 2.0, 5.0])
     vals = [r for _, r in pts]
     assert all(vals[i] >= vals[i + 1] for i in range(len(vals) - 1))
+
+
+def test_ebbinghaus_rejects_nonpositive_S():
+    with pytest.raises(ValueError):
+        ebbinghaus_retention(1.0, S=0.0)
+    with pytest.raises(ValueError):
+        ebbinghaus_retention(1.0, S=-1.0)

@@ -1,4 +1,5 @@
 # tests/test_alignment.py
+import pytest
 from bmb.alignment import curve_alignment
 
 
@@ -40,3 +41,15 @@ def test_scalar_off_baseline_is_low():
 
 def test_scalar_in_unit_interval():
     assert 0.0 <= scalar_alignment(0.5, 0.25) <= 1.0
+
+
+def test_scalar_alignment_rejects_nonpositive_scale():
+    with pytest.raises(ValueError):
+        scalar_alignment(0.5, 0.25, scale=0.0)
+    with pytest.raises(ValueError):
+        scalar_alignment(0.5, 0.25, scale=-1.0)
+
+
+def test_curve_alignment_rejects_nonpositive_scale():
+    with pytest.raises(ValueError):
+        curve_alignment([(0.0, 1.0)], [(0.0, 1.0)], scale=0.0)
