@@ -4,7 +4,7 @@ recall 在 current_ts 下,对每条已 ingest 事实,以 R=ebbinghaus(t_now - t_
 行为天然对齐遗忘基准 → 自检上界。注:用确定性 PRNG(按 fact+ts)避免真随机不可复现。
 
 确定性偏差说明:brief 原用 `hash((text, current_ts))` 作种子,但 Python 内建 `hash()` 自 3.3 起
-被 PYTHONHASHSEAD 按进程随机化盐化 —— 跨进程跑会得到不同的衰减结果,违反框架的确定性命门、
+被 PYTHONHASHSEED 按进程随机化盐化 —— 跨进程跑会得到不同的衰减结果,违反框架的确定性命门、
 使自检不可复现。改用 hashlib.sha256 派生 8 字节种子,跨进程稳定。"""
 from __future__ import annotations
 import hashlib
