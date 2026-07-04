@@ -22,3 +22,23 @@ def test_self_check_guarded():
     world = generate_world(seed=1)
     r = run_benchmark(ColdStorageAdapter(), world, [ForgettingLens(sample_ts=[0.0, 5.0])])
     assert r.overall is not None and 0.0 <= r.overall <= 1.0
+
+
+def test_end_to_end_cold_below_bio_overall():
+    """5 维聚合后冷库地板 < bio-faithful 天花板。seed=11 经 RW8 验证稳定。"""
+    from lenses.emotional import EmotionalLens
+    from lenses.self_reference import SelfReferenceLens
+    from lenses.compression import CompressionLens
+    from lenses.belief_update import BeliefUpdateLens
+
+    lenses = [
+        ForgettingLens(sample_ts=[0.0, 1.0, 2.0, 5.0]),
+        EmotionalLens(current_ts=3.0),
+        SelfReferenceLens(current_ts=3.0),
+        CompressionLens(current_ts=3.0),
+        BeliefUpdateLens(current_ts=3.0),
+    ]
+    world = generate_world(seed=11)
+    cold = run_benchmark(ColdStorageAdapter(), world, lenses)
+    bio = run_benchmark(BioFaithfulAdapter(), world, lenses)
+    assert cold.overall < bio.overall  # 5 维聚合后冷库仍低于天花板
