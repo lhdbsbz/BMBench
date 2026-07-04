@@ -25,23 +25,27 @@ def _retention_rate(adapter, n=400, **recall_kwargs):
 
 
 def _ingest_role_facts(adapter, user_id, role, n, prefix, ts=3.0):
-    """注入 n 条带指定 role 的独立事实(文本各异)。"""
+    """注入 n 条带指定 role 的独立事实(文本各异)。
+    使用零填充索引(05d)避免子串误命中,如 'det_1' 不会误匹配 'det_10'。
+    """
     for i in range(n):
         adapter.ingest(
             user_id, ts,
             StructuredEvent(
-                fact_id=f"{prefix}_{i}",
+                fact_id=f"{prefix}_{i:05d}",
                 ts=ts,
-                text=f"{prefix}_{i}",
+                text=f"{prefix}_{i:05d}",
                 role=role,
             ),
         )
 
 
 def _recall_role_rate(adapter, user_id, prefix, n, current_ts):
-    """对 prefix 的 n 条事实统计保留率(子串匹配)。"""
+    """对 prefix 的 n 条事实统计保留率(子串匹配)。
+    零填充索引保证每个 key 唯一、不互为子串。
+    """
     out = adapter.recall(user_id, "x", current_ts=current_ts)
-    return sum(1 for i in range(n) if f"{prefix}_{i}" in out) / n
+    return sum(1 for i in range(n) if f"{prefix}_{i:05d}" in out) / n
 
 
 def test_bio_faithful_is_time_aware():
