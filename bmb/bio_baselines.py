@@ -16,3 +16,15 @@ def ebbinghaus_retention(t: float, S: float = 1.0, c: float = 0.2) -> float:
 def forgetting_baseline_curve(ts: list[float], S: float = 1.0, c: float = 0.2) -> list[tuple[float, float]]:
     """在给定时间点采样艾宾浩斯曲线,返回 [(t, retention)]。"""
     return [(t, ebbinghaus_retention(t, S, c)) for t in ts]
+
+
+# —— 四透镜健康基准(占位,待认知科学文献校准,见 spec §10.1)——
+# 情绪增强:带情绪色彩信息的保留优势(Kensinger 2004 类量级)
+EMOTIONAL_ENHANCEMENT = 0.25
+# 自我参照效应:与自我相关信息的保留优势(Rogers 1977 类量级)
+SELF_REFERENCE_EFFECT = 0.15
+# 信念残留度:旧态被矛盾新信息修正后的残留比例(健康约 30% 残留 / 70% 更新)
+BELIEF_RESIDUAL = 0.30
+# 图式:要义保留率 vs 表面细节保留率(要义 > 细节)
+SCHEMA_SALIENT = 0.80
+SCHEMA_DETAIL = 0.30

@@ -1,7 +1,11 @@
 # tests/test_bio_baselines.py
 import math
 import pytest
-from bmb.bio_baselines import ebbinghaus_retention, forgetting_baseline_curve
+from bmb.bio_baselines import (
+    ebbinghaus_retention, forgetting_baseline_curve,
+    EMOTIONAL_ENHANCEMENT, SELF_REFERENCE_EFFECT,
+    BELIEF_RESIDUAL, SCHEMA_SALIENT, SCHEMA_DETAIL,
+)
 
 
 def test_retention_decreases_with_time():
@@ -28,3 +32,13 @@ def test_ebbinghaus_rejects_nonpositive_S():
         ebbinghaus_retention(1.0, S=0.0)
     with pytest.raises(ValueError):
         ebbinghaus_retention(1.0, S=-1.0)
+
+
+def test_constants_in_unit_interval():
+    for v in (EMOTIONAL_ENHANCEMENT, SELF_REFERENCE_EFFECT,
+              BELIEF_RESIDUAL, SCHEMA_SALIENT, SCHEMA_DETAIL):
+        assert 0.0 <= v <= 1.0
+
+
+def test_schema_salient_above_detail():
+    assert SCHEMA_SALIENT > SCHEMA_DETAIL  # 要义保留 > 细节保留
