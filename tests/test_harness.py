@@ -8,8 +8,7 @@ from bmb.contract import Dimension
 
 
 def _world():
-    # seed=7 在当前 bio_faithful 实现下 diff=0.049 < margin=0.05,自检刚好失败(brief 笔误);
-    # seed=1 给 diff≈0.114,稳健通过自检硬门,真正测到 run_benchmark 的出分路径。
+    # generate_world 每角色 N_PAIR 条事实,forgetting diff 远大于 margin=0.05
     return generate_world(seed=1)
 
 

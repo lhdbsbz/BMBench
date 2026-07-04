@@ -50,11 +50,12 @@ def test_world_has_salient_and_detail_facts():
     assert salient and detail
 
 
-def test_world_facts_have_distinct_roles():
+def test_world_facts_have_all_roles():
+    from generator.generate import N_PAIR
     from generator.schemas import (ROLE_EMOTIONAL, ROLE_EMOTIONAL_NEUTRAL, ROLE_SELF,
         ROLE_SELF_OTHER, ROLE_BELIEF_OLD, ROLE_BELIEF_NEW, ROLE_SALIENT, ROLE_DETAIL)
     g = generate_world(seed=1)["u1"]
     roles = [f.role for f in g.facts]
     for r in (ROLE_EMOTIONAL, ROLE_EMOTIONAL_NEUTRAL, ROLE_SELF, ROLE_SELF_OTHER,
               ROLE_BELIEF_OLD, ROLE_BELIEF_NEW, ROLE_SALIENT, ROLE_DETAIL):
-        assert roles.count(r) == 1
+        assert roles.count(r) == N_PAIR, f"角色 {r!r} 期望 {N_PAIR} 条,实际 {roles.count(r)}"
