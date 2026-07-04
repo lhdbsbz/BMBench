@@ -59,3 +59,33 @@ def test_world_facts_have_all_roles():
     for r in (ROLE_EMOTIONAL, ROLE_EMOTIONAL_NEUTRAL, ROLE_SELF, ROLE_SELF_OTHER,
               ROLE_BELIEF_OLD, ROLE_BELIEF_NEW, ROLE_SALIENT, ROLE_DETAIL):
         assert roles.count(r) == N_PAIR, f"角色 {r!r} 期望 {N_PAIR} 条,实际 {roles.count(r)}"
+
+
+def test_world_has_reconstruction_facts_with_tokens():
+    from generator.schemas import ROLE_RECONSTRUCTION
+    g = generate_world(seed=1)["u1"]
+    recon = [f for f in g.facts if f.role == ROLE_RECONSTRUCTION]
+    assert recon, "应有 reconstruction 角色 fact"
+    for f in recon:
+        assert f.core_tokens and f.detail_tokens  # 要义+细节都有
+
+
+def test_reconstruction_facts_core_detail_alignment():
+    """core_tokens 在文本前 60%，detail_tokens 在文本后 40%（T5/T6 对齐）。"""
+    from generator.generate import N_PAIR
+    from generator.schemas import ROLE_RECONSTRUCTION
+    g = generate_world(seed=1)["u1"]
+    recon = [f for f in g.facts if f.role == ROLE_RECONSTRUCTION]
+    assert len(recon) == N_PAIR, f"应有 {N_PAIR} 条 reconstruction fact,实际 {len(recon)}"
+    for f in recon:
+        cut = int(len(f.text) * 0.6)
+        front = f.text[:cut]
+        back = f.text[cut:]
+        for tok in f.core_tokens:
+            assert tok in front, (
+                f"core_token {tok!r} 不在前 60%: text={f.text!r}, cut={cut}"
+            )
+        for tok in f.detail_tokens:
+            assert tok in back, (
+                f"detail_token {tok!r} 不在后 40%: text={f.text!r}, cut={cut}"
+            )
